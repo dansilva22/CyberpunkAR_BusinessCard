@@ -6,6 +6,11 @@ using Vuforia;
 public class GenControl : MonoBehaviour, ITrackableEventHandler 
 {
     public List<GameObject> buildings = new List<GameObject>();
+    public GameObject city; 
+    public bool tracking = false;
+    public float smoothTime = 0.3f;
+    private Vector3 velocity = Vector3.zero;
+    private Renderer rend;
     
     // Start is called before the first frame update
     
@@ -20,6 +25,10 @@ public class GenControl : MonoBehaviour, ITrackableEventHandler
     protected TrackableBehaviour.Status m_NewStatus;
     void Start()
     {
+        rend = GetComponent<Renderer>();
+        rend.enabled = false;
+
+        city.SetActive(false);
         mTrackableBehaviour = GetComponent<TrackableBehaviour>();
         if (mTrackableBehaviour)
             mTrackableBehaviour.RegisterTrackableEventHandler(this);
@@ -59,16 +68,35 @@ public class GenControl : MonoBehaviour, ITrackableEventHandler
             OnTrackingLost();
         }
     }
+    public void Update()
+    {
+        if(tracking)
+        {
+            Vector3 targetPos = transform.position;
+            targetPos.z -= 1.0f; 
+            //smooth track image target
+            city.transform.position = Vector3.SmoothDamp(city.transform.position,targetPos, ref velocity, smoothTime);
+          //  Vector3 eulerRot = new Vector3(transform.eulerAngles.x,transform.eulerAngles.y,transform.eulerAngles.z);
+         //   var targetRot = Quaternion.Euler(eulerRot);
+           Quaternion targetRot = transform.rotation;
+           //targetRot.y *= city.transform.rotation.y;
+          // targetRot.x = 90;
+           city.transform.rotation = Quaternion.Slerp(city.transform.rotation,targetRot, smoothTime);
+           
+
+
+        }
+    }
 
     void OnTrackingFound()
     {
         Debug.Log("Tracking found");
-        var rendererComponents = GetComponentsInChildren<Renderer>(true);
+      /*   var rendererComponents = GetComponentsInChildren<Renderer>(true);
         var colliderComponents = GetComponentsInChildren<Collider>(true);
         var canvasComponents = GetComponentsInChildren<Canvas>(true);
 
         // Enable rendering:
-        foreach (var component in rendererComponents)
+         foreach (var component in rendererComponents)
             component.enabled = true;
 
         // Enable colliders:
@@ -77,14 +105,17 @@ public class GenControl : MonoBehaviour, ITrackableEventHandler
 
         // Enable canvas':
         foreach (var component in canvasComponents)
-            component.enabled = true;
+            component.enabled = true;*/
+        
 
+        city.SetActive(true);
+        tracking = true;
         Regenerate();
     }
 
     void OnTrackingLost()
     {
-        var rendererComponents = GetComponentsInChildren<Renderer>(true);
+      /*  var rendererComponents = GetComponentsInChildren<Renderer>(true);
         var colliderComponents = GetComponentsInChildren<Collider>(true);
         var canvasComponents = GetComponentsInChildren<Canvas>(true);
 
@@ -98,9 +129,12 @@ public class GenControl : MonoBehaviour, ITrackableEventHandler
 
         // Disable canvas':
         foreach (var component in canvasComponents)
-            component.enabled = false;
+            component.enabled = false;*/
 
         buildings.Clear();
+        tracking = false;
+        city.SetActive(false);
+        
     }
 
 
