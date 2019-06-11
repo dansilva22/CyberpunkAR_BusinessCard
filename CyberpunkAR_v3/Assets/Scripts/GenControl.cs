@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using Vuforia;
 
-public class GenControl : MonoBehaviour, ITrackableEventHandler 
+public  class GenControl : MonoBehaviour, ITrackableEventHandler 
 {
     public List<GameObject> buildings = new List<GameObject>();
     public List<GameObject> carLanes = new List<GameObject>();
     public GameObject city; 
+    public GameObject UI;
     public bool tracking = false;
     public float smoothTime = 0.3f;
     private Vector3 velocity = Vector3.zero;
@@ -28,6 +29,7 @@ public class GenControl : MonoBehaviour, ITrackableEventHandler
     {
         rend = GetComponent<Renderer>();
         rend.enabled = false;
+        UI.SetActive(true);
 
         city.SetActive(false);
         mTrackableBehaviour = GetComponent<TrackableBehaviour>();
@@ -110,7 +112,7 @@ public class GenControl : MonoBehaviour, ITrackableEventHandler
         foreach (var component in canvasComponents)
             component.enabled = true;*/
         
-
+        UI.SetActive(false);
         city.SetActive(true);
         tracking = true;
         Regenerate();
@@ -133,7 +135,7 @@ public class GenControl : MonoBehaviour, ITrackableEventHandler
         // Disable canvas':
         foreach (var component in canvasComponents)
             component.enabled = false;*/
-
+        UI.SetActive(true);
         buildings.Clear();
         //turn off car lanes
         foreach(GameObject carLane in carLanes)

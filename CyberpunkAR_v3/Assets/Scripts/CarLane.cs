@@ -43,6 +43,8 @@ public class CarLane : MonoBehaviour
 
             //spawn random vehicle, populate it's values.
             GameObject vehicle = Instantiate(vehicles[random], spawnAdjust, spawn.rotation);
+            vehicle.GetComponent<VehicleMover>().city = GameObject.FindWithTag("City");
+
             vehicle.GetComponent<VehicleMover>().target = targetAdjust;
 
             //wait til next spawn

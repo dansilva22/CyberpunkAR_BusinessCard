@@ -1,0 +1,20 @@
+#
+# Sprite sheet data for Unity.
+#
+# To import these sprites into your Unity project, download "TexturePackerImporter":
+# http://www.codeandweb.com/texturepacker/unity
+#
+# $TexturePacker:SmartUpdate:c34b04391984fe71cb8da99c773dda56:7f807c1ab8a6c8e282a03167fbd999ca:554c5f939f6403a5e836fb722cfcf8e6$
+#
+:format=40000
+:texture=AlignViewGraphic.png
+:size=4096x1024
+:pivotpoints=enabled
+
+AlignView0000;1;323;700;700;0.5;0.5
+AlignView0001;703;323;700;700;0.5;0.5
+AlignView0002;1405;323;700;700;0.5;0.5
+AlignView0003;2107;323;700;700;0.5;0.5
+AlignView0004;2809;323;700;700;0.5;0.5
+AlignView0005;2809;323;700;700;0.5;0.5
+AlignView0006;2809;323;700;700;0.5;0.5
