@@ -6,6 +6,7 @@ using Vuforia;
 public class GenControl : MonoBehaviour, ITrackableEventHandler 
 {
     public List<GameObject> buildings = new List<GameObject>();
+    public List<GameObject> carLanes = new List<GameObject>();
     public GameObject city; 
     public bool tracking = false;
     public float smoothTime = 0.3f;
@@ -70,6 +71,8 @@ public class GenControl : MonoBehaviour, ITrackableEventHandler
     }
     public void Update()
     {
+
+        //track the image target smoothly
         if(tracking)
         {
             Vector3 targetPos = transform.position;
@@ -132,6 +135,12 @@ public class GenControl : MonoBehaviour, ITrackableEventHandler
             component.enabled = false;*/
 
         buildings.Clear();
+        //turn off car lanes
+        foreach(GameObject carLane in carLanes)
+        {
+            carLane.GetComponent<CarLane>().spawnActive = false;
+        }
+        carLanes.Clear();
         tracking = false;
         city.SetActive(false);
         
@@ -143,21 +152,24 @@ public class GenControl : MonoBehaviour, ITrackableEventHandler
     public void Regenerate()
     {
         Debug.Log("Regenerating buildings");
+       
         //find all the buildings in the scene 
-       // if(buildings.Count == 0){
-            foreach(GameObject building in GameObject.FindGameObjectsWithTag("Building"))
-            {
-                buildings.Add(building);
-            }
-      //  }
+      
+        foreach(GameObject building in GameObject.FindGameObjectsWithTag("Building"))
+        {
+            buildings.Add(building);
+        }
+     
         
 
         Debug.Log("There are " + buildings.Count + " buildings.");
         
-
+        //regenerate blocks in each building
         foreach(GameObject building in buildings)
         {
             BuildingGenerator buildGen = building.GetComponent<BuildingGenerator>();
+
+            //first, remove all blocks from each building
             if(buildGen.temp.Count > 0)
             {
                 for(int i = buildGen.temp.Count -1; i >= 0; i--)
@@ -170,8 +182,17 @@ public class GenControl : MonoBehaviour, ITrackableEventHandler
             }
             
             
-
+            //then generate new blocks for each building
             buildGen.StartCoroutine("Generate");
+
+            //activate car lanes
+            foreach(GameObject carLane in GameObject.FindGameObjectsWithTag("CarLane"))
+            {
+                carLanes.Add(carLane);
+                carLane.GetComponent<CarLane>().spawnActive = true;
+                carLane.GetComponent<CarLane>().StartCoroutine("Spawner");
+
+            }
         }
 
 

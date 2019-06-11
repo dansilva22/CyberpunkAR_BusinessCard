@@ -7,6 +7,7 @@ public class BuildingGenerator : MonoBehaviour
     public List<GameObject> blocks = new List<GameObject>();
     public List<GameObject> temp =  new List<GameObject>();
     public Transform spawn; 
+    public Transform city;
     public int maxBlocks = 6;
     public int minBlocks = 3;
    // public GameObject block;
@@ -22,6 +23,7 @@ public class BuildingGenerator : MonoBehaviour
 
    public  IEnumerator Generate()
     {
+        city = GameObject.FindWithTag("City").transform;
         //determine the height of the building
         int height = Random.Range(minBlocks,maxBlocks);
         spawn = transform.GetChild(0);
@@ -32,7 +34,7 @@ public class BuildingGenerator : MonoBehaviour
 
             GameObject curBlock = Instantiate(blocks[rndBlock],spawn.position,transform.rotation);
             //set parent of the object to this building
-            curBlock.transform.SetParent(transform);
+            curBlock.transform.SetParent(city);
            // curBlock.transform.PositionInParentReference;
             //
             curBlock.transform.localScale = transform.localScale;
